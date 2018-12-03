@@ -88,7 +88,7 @@ function extractMsg(msg) {
 
   const api = getValue(apiPart);
   const time = getValue(timePart);
-  return { api: api, time: time.match(/\d+/g)[0] };
+  return { api: _.trim(api), time: time.match(/\d+/g)[0] };
 }
 
 function getValue(part) {
