@@ -1,0 +1,27 @@
+{
+  "apiTime": {
+    "sma": [
+      {
+        "from": "2018-12-03T09:00:00.000Z",
+        "value": {
+          "/api/report/stk-report": 6529.777777777777,
+          "/auth/refresh-token": 6.333333333333333,
+          "/api/stock/list-all-cars": 5378,
+          "/api/noti/api-list-of-noti-2": 297,
+          "/api/stock/my-warehouse": 2373.2,
+          "/api/stock/used-cars": 7836.666666666667,
+          "/api/stock/customer-sources": 8.333333333333334,
+          "/auth/login": 240.6,
+          "/api/noti/api-read-or-unread-message": 25,
+          "/api/stock/car-details": 28.5,
+          "/api/files": 8,
+          "/api/report/api-payment-methods": 5,
+          "/api/report/api-state-list": 12.5,
+          "/api/car-pricing/all-lists": 90,
+          "/api/libraries/used-car": 358
+        }
+      }
+    ],
+    "crm": []
+  }
+}
