@@ -177,8 +177,6 @@ function makeInterval() {
 
 makeInterval();
 
-getFullLog();
-
 function getFullLog() {
   const curr = getCurrentTime();
   getLog(getCurrentIndex(process.env.PREFIX), 
