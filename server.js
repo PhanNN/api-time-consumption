@@ -35,14 +35,15 @@ app.use('/dist', express.static(path.join(__dirname, 'dist')));
 app.use('/plugins', express.static(path.join(__dirname, 'plugins')));
 
 function initDB() {
-    if(!db.has('apiTime').value()) {
-        db.defaults({ 
-          apiTime : {
-            sma: [],
-            crm: []
-          }
-        }).write();
-    }
+  console.log('Start init DB');
+  if(!db.has('apiTime').value()) {
+      db.defaults({ 
+        apiTime : {
+          sma: [],
+          crm: []
+        }
+      }).write();
+  }
 }
 
 function getLog(index, from, to) {
@@ -133,10 +134,10 @@ function getCurrentTime() {
 
 function getCurrentIndex(prefix) {
   const t = getCurrentTime();
-  return prefix + t.year + "-" + (t.month + 1) + "-" + getValidDay(t.day);
+  return prefix + t.year + "-" + getValidNumber((t.month + 1)) + "-" + getValidNumber(t.day);
 }
 
-function getValidDay(val) {
+function getValidNumber(val) {
   const value = val + '';
   return value.length > 1 ? value : ('0' + value);
 }
@@ -164,6 +165,7 @@ app.use(function(req, res, next) {
 module.exports = app;
 
 function makeInterval() {
+  console.log('Start Interval');
   setInterval(getFullLog, 1000 * 60 * 60);
 }
 
@@ -184,6 +186,7 @@ function start() {
   } else {
     makeInterval();
   }
+  getFullLog();
 }
 
 start();
