@@ -163,19 +163,9 @@ app.use(function(req, res, next) {
 
 module.exports = app;
 
-initDB();
 function makeInterval() {
-  var d = new Date();
-  var min = d.getMinutes();
-  var sec = d.getSeconds();
-
-  if((min == '00') && (sec == '00'))
-    getFullLog();
-  else
-    setTimeout(getFullLog, (60 * (60 - min) + (60 - sec)) * 1000);
+  setInterval(getFullLog, 1000 * 60 * 60);
 }
-
-makeInterval();
 
 function getFullLog() {
   const curr = getCurrentTime();
@@ -183,6 +173,20 @@ function getFullLog() {
     new Date(Date.UTC(curr.year, curr.month, curr.day, curr.hour - 1, 0, 0)), 
     new Date(Date.UTC(curr.year, curr.month, curr.day, curr.hour, 0, 0)));
 }
+
+function start() {
+  initDB();
+  var d = new Date();
+  var min = d.getMinutes();
+  var sec = d.getSeconds();
+  if((min == '00') && (sec == '00')) {
+    setTimeout(getFullLog, (60 * (60 - min) + (60 - sec)) * 1000);
+  } else {
+    makeInterval();
+  }
+}
+
+start();
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
