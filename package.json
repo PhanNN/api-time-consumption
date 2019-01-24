@@ -1,10 +1,10 @@
 {
-  "name": "admin-lte",
-  "version": "2.4.2",
+  "name": "Api Time Tracking (Using AdminLTE template)",
+  "version": "1.0.0",
   "main": "dist/js/adminlte.min.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/almasaeed2010/AdminLTE.git"
+    "url": "https://github.com/PhanNN/api-time-consumption.git"
   },
   "license": "MIT",
   "devDependencies": {
