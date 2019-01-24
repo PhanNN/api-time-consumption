@@ -16,7 +16,7 @@ $(function() {
             cluster: 'ap1',
             forceTLS: true
         }),
-        channel, chartRef, ethChartRef;
+        channel, chartRef;
 
     function showEle(elementId) {
         document.getElementById(elementId).style.display = 'flex';
@@ -28,6 +28,19 @@ $(function() {
 
     function parseFormatNumber(number) {
         return parseFloat(number).toLocaleString();
+    }
+
+    function appendNewChart(chartId) {
+        $('#render-area').append(`
+            <div class='row'>
+                <div class='col-md-12'>
+                    <div class='chart'>
+                        <canvas id='${chartId}' style=''>
+                        </canvas>
+                    </div>
+                </div>
+            </div>`
+        );
     }
 
     function ajax(url, method, payload, successCallback) {
@@ -70,13 +83,31 @@ $(function() {
                         maxTicksLimit: 20
                     }
                 }],
-                yAxes: [{
-                    display: true,
-                    scaleLabel: {
+                yAxes: [
+                    {
+                        id: 'MS',
                         display: true,
-                        labelString: 'time(ms)'
+                        position: 'left',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'time(ms)'
+                        }
+                    },
+                    {
+                        id: 'TIME',
+                        display: true,
+                        position: 'right',
+                        ticks: {
+                            max: 20,
+                            min: 0
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'count(time)'
+                        }
                     }
-                }]
+
+                ]
             }
         };
         window[chartRef] = new Chart(ctx, {
@@ -89,8 +120,13 @@ $(function() {
 
     function init(response) {
         var respData = JSON.parse(response);
-        const data = getData(respData);
-        renderChart("apiTime", data, "chartRef", respData.from);
+        for (var index in Object.keys(respData)) {
+            const key = Object.keys(respData)[index];
+            appendNewChart(key);
+            const itemData = respData[key];
+            const data = getData(itemData);
+            renderChart(key, data, `chartRef-${key}`, `${key.toUpperCase()} - ${itemData.from}`);
+        }
     }
 
     function getData(response) {
@@ -98,16 +134,26 @@ $(function() {
             labels: [],
             datasets: [
                 {
-                    label: "# Time Consumption",
-                    backgroundColor: "#3e95cd",
-                    data: []
+                    yAxisID: 'TIME',
+                    label: "Times",
+                    borderColor: "#008000",
+                    data: [],
+                    fill: false,
+                    type: 'line'
                 },
                 {
+                    yAxisID: 'MS',
                     label: "Limit (500ms)",
                     borderColor: "#D50000",
                     data: [],
                     fill: false,
                     type: 'line'
+                },
+                {
+                    yAxisID: 'MS',
+                    label: "# Time Consumption",
+                    backgroundColor: "#3e95cd",
+                    data: []
                 }
             ]
         };
@@ -115,8 +161,9 @@ $(function() {
         for (var key in p) {
             if (p.hasOwnProperty(key)) {
                 data.labels.push(key);
-                data.datasets[0].data.push(p[key]);
+                data.datasets[0].data.push(p[key].count);
                 data.datasets[1].data.push(500);
+                data.datasets[2].data.push(p[key].avg);
             }
         }
         return data;
@@ -124,8 +171,10 @@ $(function() {
 
     channel = pusher.subscribe('api-time');
     channel.bind('new-data', function(data) {
-        const newData = getData(data);
-        window.chartRef.config.data = newData;
-        window.chartRef.update();
+        const key = Object.keys(data)[0],
+        charRefKey = `chartRef-${key}`;
+        const newData = getData(data[key]);
+        window[charRefKey].config.data = newData;
+        window[charRefKey].update();
     });
 });

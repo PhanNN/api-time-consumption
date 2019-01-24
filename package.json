@@ -1,5 +1,5 @@
 {
-  "name": "Api Time Tracking (Using AdminLTE template)",
+  "name": "api-time-consumption",
   "version": "1.0.0",
   "main": "dist/js/adminlte.min.js",
   "repository": {

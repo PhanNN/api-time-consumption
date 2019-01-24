@@ -75,7 +75,9 @@ function getLog(index, dbKey, from, to) {
       db.get('apiTime').get(dbKey)
         .push(data)
         .write();
-      pusher.trigger('api-time', 'new-data', data);
+      const pusherData = {};
+      pusherData[dbKey] = data;
+      pusher.trigger('api-time', 'new-data', pusherData);
   }, function(err) {
       console.trace(err.message);
   });
@@ -107,7 +109,9 @@ function addToMap(map, data) {
 function convertToAvg(map) {
   const newMap = {};
   _.forOwn(map, function(value, key) {
-    newMap[key] = getAvg(value);
+    newMap[key] = {};
+    newMap[key].avg = getAvg(value);
+    newMap[key].count = value.length;
   });
   return newMap;
 }
@@ -143,7 +147,10 @@ function getValidNumber(val) {
 }
 
 function getLastData() {
-  return _.last(db.get('apiTime').get('sma').value());
+  return {
+    "sma": _.last(db.get('apiTime').get('sma').value()),
+    "crm": _.last(db.get('apiTime').get('crm').value())
+  };
 }
 
 app.get('/init', function(req, res) {
