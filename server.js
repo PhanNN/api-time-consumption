@@ -21,7 +21,7 @@ var pusher = new Pusher({
 var client = new elasticsearch.Client({
   host: process.env.ES_HOST,
   httpAuth: process.env.ES_AUTH,
-  log: 'trace'
+  log: 'info'
 });
 
 var app = express();
@@ -52,7 +52,7 @@ function getLog(index, dbKey, from, to) {
     type: 'log',
     body: {
       from: 0,
-      size: 100,
+      size: 10000,
       query: {
         bool: {
           must: [
@@ -63,10 +63,12 @@ function getLog(index, dbKey, from, to) {
         }
       }
     }
-  }).then(function(resp) {
-      var map = {};
-      _.each(resp.hits.hits, function(value) {
-        addToMap(map, extractMsg(value._source.message));
+  }).then(async function(resp) {
+      var map = {},
+      hits = resp.hits.hits;
+      console.log(`Total records: ${hits.length}`);
+      await _.each(hits, async function(value) {
+        await addToMap(map, extractMsg(value._source.message));
       });
       const data = { 
         from: from,
@@ -98,12 +100,12 @@ function getValue(part) {
   return part.split(':')[1];
 }
 
-function addToMap(map, data) {
+async function addToMap(map, data) {
   const api = data.api;
   if (!map[api]) {
     map[api] = [];
   }
-  map[api] = _.union(map[api], [data.time]);
+  map[api] = _.concat(map[api], [data.time]);
 }
 
 function convertToAvg(map) {
@@ -112,6 +114,7 @@ function convertToAvg(map) {
     newMap[key] = {};
     newMap[key].avg = getAvg(value);
     newMap[key].count = value.length;
+    // console.log(`${key}: Avg: ${newMap[key].avg} - Count: ${newMap[key].count}`)
   });
   return newMap;
 }

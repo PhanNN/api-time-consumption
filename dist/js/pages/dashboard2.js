@@ -98,7 +98,7 @@ $(function() {
                         display: true,
                         position: 'right',
                         ticks: {
-                            max: 50,
+                            max: 100,
                             min: 0
                         },
                         scaleLabel: {
