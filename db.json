@@ -40,8 +40,42 @@
           "/api/car-pricing/all-lists": 90,
           "/api/libraries/used-car": 358
         }
+      },
+      {
+        "from": "2019-01-24T02:00:00.000Z",
+        "value": {
+          "/api/report/api-payment-methods": 5.5,
+          "/api/report/api-state-list": 14,
+          "/api/report/stk-report": 7817.25,
+          "/api/car-comparision/all-cars": 24,
+          "/auth/login": 247.33333333333334,
+          "/api/noti/api-list-of-noti-2": 323.8,
+          "/api/stock/my-warehouse": 2220.75,
+          "/auth/refresh-token": 6.5,
+          "/api/stock/used-cars": 7029.75,
+          "/api/quotation/tasks-car-quotation": 17.2,
+          "/api/quotation/tfs/calculator": 243.42857142857142,
+          "/api/stock/list-all-cars": 2874,
+          "/api/quotation/tfs/finances": 12.4,
+          "/auth/register-device": 263.2,
+          "/api/quotation/discount-rates": 17,
+          "/api/libraries/list-car-model": 1479.5714285714287,
+          "/api/libraries/create": 705,
+          "/api/quotation/provinces-districts": 13,
+          "/api/quotation/accessories": 114.5,
+          "/api/quotation/list-car-quotation": 161,
+          "/api/account/customer-quotations-search": 292.5,
+          "/api/stock/customer-sources": 4.5,
+          "/api/quotation/insurance-rates": 146,
+          "/auth/delete-tokens": 11
+        }
       }
     ],
-    "crm": []
+    "crm": [
+      {
+        "from": "2019-01-24T02:00:00.000Z",
+        "value": {}
+      }
+    ]
   }
 }

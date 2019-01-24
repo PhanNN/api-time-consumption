@@ -46,7 +46,7 @@ function initDB() {
   }
 }
 
-function getLog(index, from, to) {
+function getLog(index, dbKey, from, to) {
   client.search({
     index: index,
     type: 'log',
@@ -72,7 +72,7 @@ function getLog(index, from, to) {
         from: from,
         value: convertToAvg(map)
       };
-      db.get('apiTime').get('sma')
+      db.get('apiTime').get(dbKey)
         .push(data)
         .write();
       pusher.trigger('api-time', 'new-data', data);
@@ -170,10 +170,11 @@ function makeInterval() {
 }
 
 function getFullLog() {
-  const curr = getCurrentTime();
-  getLog(getCurrentIndex(process.env.PREFIX), 
-    new Date(Date.UTC(curr.year, curr.month, curr.day, curr.hour - 1, 0, 0)), 
-    new Date(Date.UTC(curr.year, curr.month, curr.day, curr.hour, 0, 0)));
+  const curr = getCurrentTime(),
+  from = new Date(Date.UTC(curr.year, curr.month, curr.day, curr.hour - 1, 0, 0)),
+  to = new Date(Date.UTC(curr.year, curr.month, curr.day, curr.hour, 0, 0));
+  getLog(getCurrentIndex(process.env.SMA_PREFIX), "sma", from, to);
+  getLog(getCurrentIndex(process.env.CRM_PREFIX), "crm", from, to);
 }
 
 function start() {
