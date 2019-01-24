@@ -190,9 +190,9 @@ function start() {
   var min = d.getMinutes();
   var sec = d.getSeconds();
   if((min == '00') && (sec == '00')) {
-    setTimeout(getFullLog, (60 * (60 - min) + (60 - sec)) * 1000);
-  } else {
     makeInterval();
+  } else {
+    setTimeout(makeInterval, (60 * (60 - min) + (60 - sec)) * 1000);
   }
   getFullLog();
 }
