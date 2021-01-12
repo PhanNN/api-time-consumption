@@ -49,7 +49,7 @@ function initDB() {
 function getLog(index, dbKey, from, to) {
   client.search({
     index: index,
-    type: 'log',
+    // type: 'log',
     body: {
       from: 0,
       size: 10000,
